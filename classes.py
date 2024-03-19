@@ -65,15 +65,3 @@ class ProductList:
         with open('data.csv', mode='a', newline='') as data_csv:
             writer = csv.writer(data_csv)
             writer.writerow([p.name, p.description, p.price, p.available])
-
-
-# Testando o código
-product_list = ProductList()
-
-print("Produtos antes da ordenação:")
-for product in product_list.products:
-    print(product)
-
-print("\nProdutos após a ordenação:")
-for product in product_list.products:
-    print(product)
