@@ -3,43 +3,55 @@ from tkinter import ttk
 from classes import *
 
 
-def add_product():
-    # Cria uma nova janela Toplevel (pop-up)
+def popup_add_product():
     popup = tk.Toplevel(window)
     popup.geometry("500x500")
     popup.title("Adicionar produto")
 
-    name = tk.StringVar()
-    description = tk.StringVar()
-    price = tk.DoubleVar()
-    available = tk.BooleanVar()
+    p_name = tk.StringVar()
+    p_description = tk.StringVar()
+    p_price = tk.DoubleVar()
+    p_available = tk.BooleanVar()
 
     label_name = ttk.Label(popup, text="Nome:")
     label_name.grid(row=0, column=0, padx=10, pady=10)
-    entry_name = ttk.Entry(popup, textvariable=name)
+    entry_name = ttk.Entry(popup, textvariable=p_name)
     entry_name.grid(row=0, column=1, padx=10, pady=10)
 
     label_description = ttk.Label(popup, text="Descrição:")
     label_description.grid(row=1, column=0, padx=10, pady=10)
-    entry_description = ttk.Entry(popup, textvariable=description)
+    entry_description = ttk.Entry(popup, textvariable=p_description)
     entry_description.grid(row=1, column=1, padx=10, pady=10)
 
     label_price = ttk.Label(popup, text="Preço:")
     label_price.grid(row=2, column=0, padx=10, pady=10)
-    entry_price = ttk.Entry(popup, textvariable=price)
+    entry_price = ttk.Entry(popup, textvariable=p_price)
     entry_price.grid(row=2, column=1, padx=10, pady=10)
 
     label_available = ttk.Label(popup, text="Disponível:")
     label_available.grid(row=3, column=0, padx=10, pady=10)
-    entry_available = ttk.Checkbutton(popup,variable=available)
+    entry_available = ttk.Checkbutton(popup, variable=p_available)
     entry_available.grid(row=3, column=1, padx=10, pady=10)
 
-    # button_test = ttk.Button(popup, text="teste", command=lambda: print(p_name.get()))
-    # button_test.pack()
+    def button_adicionar():
+        p = Product(name=p_name.get(), description=p_description.get(),
+                    price=float(p_price.get()), available=bool(p_available.get()))
 
-    button_close = ttk.Button(popup, text="Fechar", command=popup.destroy)
-    button_close.pack(side=tk.BOTTOM, padx=10, pady=10)
+        product_list.add_product(p)
+        update_treeview()
 
+        popup.destroy()
+
+    button_popup_add = ttk.Button(popup, text="Adicionar", command=lambda: button_adicionar)
+    button_popup_add.grid(row=4, column=0)
+
+
+def update_treeview():
+    for row in table.get_children():
+        table.delete(row)
+
+    for product in product_list.products:
+        table.insert('', 'end', values=(product.name, product.price))
 
 
 # window
@@ -50,7 +62,7 @@ window.title('Produtos')
 # data
 product_list = ProductList()
 
-button_add = ttk.Button(window, text="Adicionar produto", command=add_product)
+button_add = ttk.Button(window, text="Adicionar produto", command=popup_add_product)
 button_add.pack(padx=20, pady=20)
 
 # table

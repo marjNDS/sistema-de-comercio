@@ -65,3 +65,4 @@ class ProductList:
         with open('data.csv', mode='a', newline='') as data_csv:
             writer = csv.writer(data_csv)
             writer.writerow([p.name, p.description, p.price, p.available])
+        self.sort_by_price_reverse()
